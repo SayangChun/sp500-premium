@@ -135,22 +135,49 @@
     return s.length === 14 ? `${s.slice(8, 10)}:${s.slice(10, 12)}:${s.slice(12, 14)}` : null;
   }
 
-  /* ---------- 期货 / 汇率：Yahoo Finance ---------- */
+  /* ---------- 期货 / 汇率：ES 期货腾讯优先（国内直连、CORS *），Yahoo 兜底；汇率 Yahoo ---------- */
   async function yahoo(sym, range, interval) {
     return getJSON(`https://query1.finance.yahoo.com/v8/finance/chart/${sym}?range=${range}&interval=${interval}`);
   }
-  async function fetchMarket() {
-    for (const [sym, key] of [["ES=F", "es"], ["CNY=X", "fx"]]) {
-      try {
-        const r = await yahoo(sym, "1d", "1m");
-        const meta = r.chart.result[0].meta;
-        state[key] = { price: num(meta.regularMarketPrice), chg_pct: num(meta.regularMarketChangePercent), time: bjFromUnix(meta.regularMarketTime) };
-        state.src[key === "es" ? "fut" : "fx"] = "live";
-      } catch (e) {
-        state.src[key === "es" ? "fut" : "fx"] = "down";
+  async function fetchEs() {
+    try {
+      const txt = await getText("https://qt.gtimg.cn/q=hf_ES");
+      const m = /v_hf_ES="([^"]*)"/.exec(txt);
+      if (m) {
+        const a = m[1].split(",");
+        if (a.length >= 8 && a[0]) {
+          state.es = {
+            price: num(a[0]), chg_pct: num(a[1]),
+            time: a[12] ? `${a[12].slice(5)} ${a[6]}` : a[6], source: "腾讯",
+          };
+          state.src.fut = "live";
+          return;
+        }
       }
+    } catch (e) { /* 走 Yahoo 兜底 */ }
+    try {
+      const r = await yahoo("ES=F", "1d", "1m");
+      const meta = r.chart.result[0].meta;
+      state.es = {
+        price: num(meta.regularMarketPrice), chg_pct: num(meta.regularMarketChangePercent),
+        time: bjFromUnix(meta.regularMarketTime), source: "Yahoo",
+      };
+      state.src.fut = "live";
+    } catch (e) {
+      state.src.fut = "down";
     }
-    setChip("src-fut", "期货 " + (state.es ? "实时" : "中断"), state.src.fut);
+  }
+  async function fetchMarket() {
+    await fetchEs();
+    try {
+      const r = await yahoo("CNY=X", "1d", "1m");
+      const meta = r.chart.result[0].meta;
+      state.fx = { price: num(meta.regularMarketPrice), time: bjFromUnix(meta.regularMarketTime) };
+      state.src.fx = "live";
+    } catch (e) {
+      state.src.fx = "down";
+    }
+    setChip("src-fut", "期货 " + (state.es ? state.es.source : "中断"), state.src.fut);
     setChip("src-fx", "汇率 " + (state.fx ? "实时" : "中断"), state.src.fx);
   }
   async function fetchDaily() {
@@ -263,9 +290,9 @@
     const fx = state.fx || (state.data && state.data.market.fx) || null;
     $("es-price").textContent = es && es.price != null ? fmt(es.price, 2) : "—";
     $("es-sub").innerHTML = es && es.chg_pct != null
-      ? `<span class="${signCls(es.chg_pct)}">${pct(es.chg_pct)}</span>${es.time ? " · " + esc(es.time) : ""}${state.es ? "" : "（快照）"}`
+      ? `<span class="${signCls(es.chg_pct)}">${pct(es.chg_pct)}</span>${es.time ? " · " + esc(es.time) : ""}${state.es ? " · " + esc(state.es.source || "实时") : "（快照）"}`
       : "等待数据";
-    $("es-tag").textContent = state.es ? "实时" : "快照";
+    $("es-tag").textContent = state.es ? (state.es.source || "实时") : "快照";
     $("spx-price").textContent = spx && spx.price != null ? fmt(spx.price, 2) : "—";
     $("spx-sub").textContent = spx && spx.date ? "收盘日 " + esc(spx.date) : "—";
     $("fx-price").textContent = fx && fx.price != null ? fmt(fx.price, 4) : "—";

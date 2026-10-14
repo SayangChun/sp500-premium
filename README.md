@@ -34,7 +34,8 @@ QDII 基金净值按美股交易日披露、次日晚间才公布，而 A 股白
 ```
 浏览器（每秒级实时，无服务端）
  ├─ 场内行情    东方财富 push2（3秒） → 腾讯行情 qt.gtimg.cn（兜底）
- ├─ 期货/汇率   Yahoo Finance：E-mini S&P 500 期货（10秒）、USD/CNY
+ ├─ 期货       腾讯 qt.gtimg.cn hf_ES（10秒，国内直连） → Yahoo ES=F（兜底）
+ ├─ 汇率        Yahoo Finance CNY=X（影响已钳制在 ±0.5%）
  ├─ 官方净值    天天基金 fundmobapi（5分钟）
  └─ HaoETF 对照 data/sp500.json ← GitHub Actions（每5分钟抓取并自动提交）
 
