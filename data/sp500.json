@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T20:23:12+08:00",
+  "generated_at": "2026-10-14T20:26:05+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -8,20 +8,20 @@
   "market": {
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
-      "price": 7874.75,
-      "chg_pct": 0.242,
-      "time": "2026-10-14 20:12:54",
+      "price": 7874.5,
+      "chg_pct": 0.239,
+      "time": "2026-10-14 20:15:44",
       "daily": {
         "2026-10-09": 7859.75,
         "2026-10-12": 7858.0,
         "2026-10-13": 7855.75,
-        "2026-10-14": 7874.75
+        "2026-10-14": 7874.5
       }
     },
     "fx": {
       "name": "USD/CNY",
       "price": 6.6821,
-      "time": "2026-10-14 20:20:55",
+      "time": "2026-10-14 20:24:46",
       "daily": {
         "2026-10-07": 6.7045,
         "2026-10-08": 6.7021,
@@ -60,7 +60,7 @@
       "premium_pct": 10.1,
       "naive_premium_pct": 10.19,
       "haoetf": {
-        "est_nav": 2.4901,
+        "est_nav": 2.4902,
         "premium_pct": 10.03,
         "t1_est_nav": 2.4864,
         "t1_premium_pct": 10.2,
@@ -70,7 +70,7 @@
         "nav": null,
         "nav_date": "2026-10-13",
         "quota": "100万份",
-        "updated": "2026-10-14 20:22:18"
+        "updated": "2026-10-14 20:25:19"
       }
     },
     {
@@ -93,12 +93,12 @@
       "es_ref_date": "2026-10-12",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 1.9517,
+      "est_nav": 1.9516,
       "premium_pct": 7.86,
       "naive_premium_pct": 7.92,
       "haoetf": {
-        "est_nav": 1.9533,
-        "premium_pct": 7.77,
+        "est_nav": 1.9534,
+        "premium_pct": 7.76,
         "t1_est_nav": 1.9503,
         "t1_premium_pct": 7.93,
         "price": 2.105,
@@ -107,7 +107,7 @@
         "nav": 0.0,
         "nav_date": "2026-10-12",
         "quota": null,
-        "updated": "2026-10-14 20:22:35"
+        "updated": "2026-10-14 20:25:36"
       }
     },
     {
@@ -130,12 +130,12 @@
       "es_ref_date": "2026-10-13",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 1.9053,
+      "est_nav": 1.9052,
       "premium_pct": 7.39,
       "naive_premium_pct": 7.47,
       "haoetf": {
-        "est_nav": 1.9056,
-        "premium_pct": 7.37,
+        "est_nav": 1.9058,
+        "premium_pct": 7.36,
         "t1_est_nav": 1.9028,
         "t1_premium_pct": 7.53,
         "price": 2.046,
@@ -144,7 +144,7 @@
         "nav": 400.0,
         "nav_date": "2026-10-13",
         "quota": "100万份",
-        "updated": "2026-10-14 20:22:41"
+        "updated": "2026-10-14 20:25:43"
       }
     },
     {
@@ -168,11 +168,11 @@
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
       "est_nav": 1.8938,
-      "premium_pct": 7.45,
+      "premium_pct": 7.46,
       "naive_premium_pct": 7.51,
       "haoetf": {
-        "est_nav": 1.8956,
-        "premium_pct": 7.35,
+        "est_nav": 1.8958,
+        "premium_pct": 7.34,
         "t1_est_nav": 1.8928,
         "t1_premium_pct": 7.51,
         "price": 2.035,
@@ -181,7 +181,7 @@
         "nav": null,
         "nav_date": "2026-10-12",
         "quota": "100万份",
-        "updated": "2026-10-14 20:22:40"
+        "updated": "2026-10-14 20:25:42"
       }
     },
     {
@@ -204,12 +204,12 @@
       "es_ref_date": "2026-10-13",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 3.1829,
+      "est_nav": 3.1828,
       "premium_pct": 4.94,
       "naive_premium_pct": 5.02,
       "haoetf": {
-        "est_nav": 3.185,
-        "premium_pct": 4.87,
+        "est_nav": 3.1852,
+        "premium_pct": 4.86,
         "t1_est_nav": 3.1803,
         "t1_premium_pct": 5.02,
         "price": 3.34,
@@ -218,7 +218,7 @@
         "nav": 0.0,
         "nav_date": "2026-10-13",
         "quota": "暂停申购",
-        "updated": "2026-10-14 20:22:13"
+        "updated": "2026-10-14 20:25:13"
       }
     }
   ]
