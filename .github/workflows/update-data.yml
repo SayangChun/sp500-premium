@@ -6,6 +6,9 @@ on:
     - cron: "*/5 1-7 * * 1-5"
     - cron: "*/15 0-15 * * 1-5"
   workflow_dispatch: {}
+  push:
+    branches: [main]
+    paths-ignore: ["data/sp500.json"]  # 机器人自己提交的数据变更不触发，避免闭环
 
 permissions:
   contents: write
