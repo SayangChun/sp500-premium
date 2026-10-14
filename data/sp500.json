@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-14T15:19:36+08:00",
+  "generated_at": "2026-10-14T20:23:12+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -8,26 +8,26 @@
   "market": {
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
-      "price": 7869.25,
-      "chg_pct": 0.172,
-      "time": "2026-10-14 15:09:08",
+      "price": 7874.75,
+      "chg_pct": 0.242,
+      "time": "2026-10-14 20:12:54",
       "daily": {
         "2026-10-09": 7859.75,
         "2026-10-12": 7858.0,
         "2026-10-13": 7855.75,
-        "2026-10-14": 7869.0
+        "2026-10-14": 7874.75
       }
     },
     "fx": {
       "name": "USD/CNY",
-      "price": 6.6924,
-      "time": "2026-10-14 15:19:19",
+      "price": 6.6821,
+      "time": "2026-10-14 20:20:55",
       "daily": {
         "2026-10-07": 6.7045,
         "2026-10-08": 6.7021,
         "2026-10-11": 6.692,
         "2026-10-12": 6.692,
-        "2026-10-14": 6.6924
+        "2026-10-14": 6.6821
       }
     },
     "spx_spot": {
@@ -45,32 +45,32 @@
       "price": 2.74,
       "chg_pct": -0.00014000000000000001,
       "amount": 121.65,
-      "quote_time": "2026-10-14 15:19:12",
+      "quote_time": "2026-10-14 16:11:41",
       "quote_source": "push2",
       "nav_source": "tencent",
-      "nav": 2.4875,
-      "nav_date": "2026-10-12",
+      "nav": 2.4866,
+      "nav_date": "2026-10-13",
       "nav_chg_pct": 0.04,
       "position": 0.95,
-      "es_ref": 7858.0,
-      "es_ref_date": "2026-10-12",
+      "es_ref": 7855.75,
+      "es_ref_date": "2026-10-13",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 2.491,
-      "premium_pct": 9.99,
-      "naive_premium_pct": 10.15,
+      "est_nav": 2.4886,
+      "premium_pct": 10.1,
+      "naive_premium_pct": 10.19,
       "haoetf": {
-        "est_nav": 2.4881,
-        "premium_pct": 10.13,
+        "est_nav": 2.4901,
+        "premium_pct": 10.03,
         "t1_est_nav": 2.4864,
         "t1_premium_pct": 10.2,
         "price": 2.74,
         "chg_pct": -0.51,
         "amount": 121.65,
         "nav": null,
-        "nav_date": "2026-10-12",
+        "nav_date": "2026-10-13",
         "quota": "100万份",
-        "updated": "2026-10-14 15:19:19"
+        "updated": "2026-10-14 20:22:18"
       }
     },
     {
@@ -82,10 +82,10 @@
       "price": 2.105,
       "chg_pct": 0.0,
       "amount": 12.85,
-      "quote_time": "2026-10-14 15:19:00",
+      "quote_time": "2026-10-14 15:34:15",
       "quote_source": "push2",
       "nav_source": "tencent",
-      "nav": 1.9512,
+      "nav": 1.9506,
       "nav_date": "2026-10-12",
       "nav_chg_pct": 0.0,
       "position": 0.95,
@@ -93,12 +93,12 @@
       "es_ref_date": "2026-10-12",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 1.954,
-      "premium_pct": 7.73,
-      "naive_premium_pct": 7.88,
+      "est_nav": 1.9517,
+      "premium_pct": 7.86,
+      "naive_premium_pct": 7.92,
       "haoetf": {
-        "est_nav": 1.9517,
-        "premium_pct": 7.85,
+        "est_nav": 1.9533,
+        "premium_pct": 7.77,
         "t1_est_nav": 1.9503,
         "t1_premium_pct": 7.93,
         "price": 2.105,
@@ -107,7 +107,7 @@
         "nav": 0.0,
         "nav_date": "2026-10-12",
         "quota": null,
-        "updated": "2026-10-14 15:18:37"
+        "updated": "2026-10-14 20:22:35"
       }
     },
     {
@@ -119,32 +119,32 @@
       "price": 2.046,
       "chg_pct": 1e-05,
       "amount": 70.56,
-      "quote_time": "2026-10-14 15:18:45",
+      "quote_time": "2026-10-14 15:34:21",
       "quote_source": "push2",
       "nav_source": "tencent",
-      "nav": 1.9036,
-      "nav_date": "2026-10-12",
+      "nav": 1.9037,
+      "nav_date": "2026-10-13",
       "nav_chg_pct": 0.05,
       "position": 0.95,
-      "es_ref": 7858.0,
-      "es_ref_date": "2026-10-12",
+      "es_ref": 7855.75,
+      "es_ref_date": "2026-10-13",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 1.9063,
-      "premium_pct": 7.33,
-      "naive_premium_pct": 7.48,
+      "est_nav": 1.9053,
+      "premium_pct": 7.39,
+      "naive_premium_pct": 7.47,
       "haoetf": {
-        "est_nav": 1.9041,
-        "premium_pct": 7.45,
+        "est_nav": 1.9056,
+        "premium_pct": 7.37,
         "t1_est_nav": 1.9028,
         "t1_premium_pct": 7.53,
         "price": 2.046,
         "chg_pct": 0.05,
         "amount": 70.56,
         "nav": 400.0,
-        "nav_date": "2026-10-12",
+        "nav_date": "2026-10-13",
         "quota": "100万份",
-        "updated": "2026-10-14 15:18:43"
+        "updated": "2026-10-14 20:22:41"
       }
     },
     {
@@ -156,10 +156,10 @@
       "price": 2.035,
       "chg_pct": -1e-05,
       "amount": 188.86,
-      "quote_time": "2026-10-14 15:19:16",
+      "quote_time": "2026-10-14 16:11:45",
       "quote_source": "push2",
       "nav_source": "tencent",
-      "nav": 1.8936,
+      "nav": 1.8928,
       "nav_date": "2026-10-12",
       "nav_chg_pct": 0.05,
       "position": 0.95,
@@ -167,12 +167,12 @@
       "es_ref_date": "2026-10-12",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 1.8963,
-      "premium_pct": 7.31,
-      "naive_premium_pct": 7.47,
+      "est_nav": 1.8938,
+      "premium_pct": 7.45,
+      "naive_premium_pct": 7.51,
       "haoetf": {
-        "est_nav": 1.8941,
-        "premium_pct": 7.44,
+        "est_nav": 1.8956,
+        "premium_pct": 7.35,
         "t1_est_nav": 1.8928,
         "t1_premium_pct": 7.51,
         "price": 2.035,
@@ -181,7 +181,7 @@
         "nav": null,
         "nav_date": "2026-10-12",
         "quota": "100万份",
-        "updated": "2026-10-14 15:18:42"
+        "updated": "2026-10-14 20:22:40"
       }
     },
     {
@@ -193,32 +193,32 @@
       "price": 3.34,
       "chg_pct": 0.0001,
       "amount": 3.77,
-      "quote_time": "2026-10-14 15:18:27",
+      "quote_time": "2026-10-14 15:34:27",
       "quote_source": "push2",
       "nav_source": "tencent",
-      "nav": 3.1817,
-      "nav_date": "2026-10-12",
+      "nav": 3.1803,
+      "nav_date": "2026-10-13",
       "nav_chg_pct": 0.06,
       "position": 0.95,
-      "es_ref": 7858.0,
-      "es_ref_date": "2026-10-12",
+      "es_ref": 7855.75,
+      "es_ref_date": "2026-10-13",
       "fx_ref": 6.692,
       "fx_ref_date": "2026-10-12",
-      "est_nav": 3.1862,
-      "premium_pct": 4.83,
-      "naive_premium_pct": 4.98,
+      "est_nav": 3.1829,
+      "premium_pct": 4.94,
+      "naive_premium_pct": 5.02,
       "haoetf": {
-        "est_nav": 3.1825,
-        "premium_pct": 4.95,
+        "est_nav": 3.185,
+        "premium_pct": 4.87,
         "t1_est_nav": 3.1803,
         "t1_premium_pct": 5.02,
         "price": 3.34,
         "chg_pct": 0.3,
         "amount": 3.77,
         "nav": 0.0,
-        "nav_date": "2026-10-12",
+        "nav_date": "2026-10-13",
         "quota": "暂停申购",
-        "updated": "2026-10-14 15:19:14"
+        "updated": "2026-10-14 20:22:13"
       }
     }
   ]
