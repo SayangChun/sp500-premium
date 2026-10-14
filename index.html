@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>标普500场内基金 · 真实溢价率</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div>
+    <h1>标普500场内基金 · 真实溢价率</h1>
+    <p class="sub">剔除中美交易时段错位 · 场内行情每 3 秒刷新 · 全部数值在浏览器端实时计算</p>
+  </div>
+  <div class="clockbox">
+    <div id="bj-time" class="bjtime">--:--:--</div>
+    <span id="market-status" class="chip">--</span>
+  </div>
+</header>
+
+<section class="cards">
+  <div class="card">
+    <div class="card-label">E-mini S&amp;P 500 期货 <span class="card-tag" id="es-tag">实时</span></div>
+    <div class="card-value" id="es-price">--</div>
+    <div class="card-sub" id="es-sub">--</div>
+  </div>
+  <div class="card">
+    <div class="card-label">标普500 现货（最近收盘）</div>
+    <div class="card-value" id="spx-price">--</div>
+    <div class="card-sub" id="spx-sub">--</div>
+  </div>
+  <div class="card">
+    <div class="card-label">USD/CNY</div>
+    <div class="card-value" id="fx-price">--</div>
+    <div class="card-sub" id="fx-sub">--</div>
+  </div>
+  <div class="card">
+    <div class="card-label">估值基准数据</div>
+    <div class="card-value card-value-sm" id="snap-time">--</div>
+    <div class="card-sub" id="snap-sub">--</div>
+  </div>
+</section>
+
+<section class="controls">
+  <label class="slider-label" for="pos-slider">仓位假设
+    <input type="range" id="pos-slider" min="85" max="100" value="95" step="1">
+    <b id="pos-value">95%</b>
+  </label>
+  <span class="hint">基金实际仓位约 95%（移动平均估算），拖动可做敏感性测算</span>
+</section>
+
+<section class="srcs" id="source-chips">
+  <span class="chip" id="src-quote">行情 —</span>
+  <span class="chip" id="src-fut">期货 —</span>
+  <span class="chip" id="src-fx">汇率 —</span>
+  <span class="chip" id="src-nav">净值 —</span>
+  <span class="chip" id="src-snap">快照 —</span>
+</section>
+
+<table class="funds">
+  <thead>
+    <tr>
+      <th class="col-fund">基金</th>
+      <th>场内价 / 涨跌</th>
+      <th>最新净值</th>
+      <th>估算净值</th>
+      <th class="col-prem">真实溢价率</th>
+      <th>未修正溢价</th>
+      <th>HaoETF 对照</th>
+      <th>成交额</th>
+    </tr>
+  </thead>
+  <tbody id="fund-rows">
+    <tr><td colspan="8" class="loading">数据加载中…</td></tr>
+  </tbody>
+</table>
+
+<section class="notes">
+  <h2>口径说明</h2>
+  <div class="formula">
+    估算净值 = 最新净值 × (1 + (期货现价 ÷ 净值日期货日收盘 − 1) × 仓位) × (1 + 汇率变动)<br>
+    <b>真实溢价率 = 场内现价 ÷ 估算净值 − 1</b>（已剔除美股休市、A股先行造成的时差）<br>
+    未修正溢价 = 场内现价 ÷ 最新净值 − 1（券商App常见的 T-1 滞后口径）
+  </div>
+  <ul>
+    <li>净值日期货/汇率日收盘为估算锚点；行情、期货、汇率均为实时抓取，页面无服务端参与。</li>
+    <li>HaoETF 对照列来自 haoetf.com 单基金页（由 GitHub Actions 每 5 分钟抓取快照），其口径用人民币中间价（每日 9:15 更新），与本站 CNH 实时价存在约 0.05%–0.1% 的系统性小差。</li>
+    <li>QDII 净值按「美股交易日」口径披露、次日晚间公布；当日晚间净值公布后，本页基准自动切换。</li>
+    <li>仅跟踪<b>标普500指数</b>本指数，不含信息科技/生物科技/医疗保健等行业衍生品。</li>
+  </ul>
+</section>
+
+<footer>
+  数据来源：东方财富 / 腾讯行情（实时行情）、天天基金（净值）、Yahoo Finance（E-mini S&amp;P 500 期货、USD/CNY）、HaoETF（对照快照）·
+  本项目不构成投资建议 · <a href="https://github.com/SayangChun/sp500-premium">GitHub: SayangChun/sp500-premium</a>
+</footer>
+
+</div>
+<script src="assets/app.js"></script>
+</body>
+</html>

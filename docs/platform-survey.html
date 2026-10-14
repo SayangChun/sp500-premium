@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>标普500场内基金「真实溢价率」查询平台调研</title>
+<style>
+  :root{
+    --bg:#f5f7fa; --card:#ffffff; --ink:#1f2937; --muted:#6b7280;
+    --blue:#1a56db; --blue-bg:#eaf1fe; --line:#e5e7eb;
+    --red:#b91c1c; --red-bg:#fef2f2; --green:#047857; --green-bg:#ecfdf5;
+    --amber:#b45309; --amber-bg:#fffbeb;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;line-height:1.75;font-size:15px}
+  .wrap{max-width:960px;margin:0 auto;padding:32px 20px 64px}
+  header h1{font-size:26px;letter-spacing:.5px}
+  header .sub{color:var(--muted);margin-top:6px;font-size:13.5px}
+  .tldr{background:var(--blue-bg);border:1px solid #c7dbfd;border-left:5px solid var(--blue);border-radius:10px;padding:18px 22px;margin:22px 0}
+  .tldr h2{font-size:17px;color:var(--blue);margin-bottom:8px}
+  .tldr ul{margin-left:20px}
+  .tldr li{margin:4px 0}
+  h2.sec{font-size:19px;margin:38px 0 6px;padding-top:10px;border-top:2px solid var(--line)}
+  h2.sec:first-of-type{border-top:none}
+  .lead{color:var(--muted);font-size:13.5px;margin-bottom:12px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:18px 22px;margin:14px 0}
+  .card h3{font-size:15.5px;margin-bottom:8px}
+  table{width:100%;border-collapse:collapse;margin:12px 0;background:var(--card);font-size:13.5px}
+  th{background:#f3f4f6;text-align:left;padding:9px 10px;border:1px solid var(--line);white-space:nowrap}
+  td{padding:9px 10px;border:1px solid var(--line);vertical-align:top}
+  tr:nth-child(even) td{background:#fafbfc}
+  a{color:var(--blue);text-decoration:none;word-break:break-all}
+  a:hover{text-decoration:underline}
+  .tag{display:inline-block;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
+  .tag.yes{background:var(--green-bg);color:var(--green);border:1px solid #a7f3d0}
+  .tag.no{background:#f3f4f6;color:var(--muted);border:1px solid var(--line)}
+  .tag.part{background:var(--amber-bg);color:var(--amber);border:1px solid #fde68a}
+  .warn{background:var(--red-bg);border:1px solid #fecaca;border-left:5px solid var(--red);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:13.5px}
+  .note{background:var(--amber-bg);border:1px solid #fde68a;border-left:5px solid var(--amber);border-radius:10px;padding:14px 18px;margin:14px 0;font-size:13.5px}
+  .formula{background:#0f172a;color:#e2e8f0;border-radius:10px;padding:16px 20px;font-family:Consolas,Menlo,Monaco,"Courier New",monospace;font-size:13px;line-height:1.9;overflow-x:auto;margin:12px 0}
+  .formula .cm{color:#94a3b8}
+  ul.tight{margin-left:20px}
+  ul.tight li{margin:5px 0}
+  .snapshot td:nth-child(3),.snapshot td:nth-child(4){font-variant-numeric:tabular-nums}
+  .hot{color:var(--red);font-weight:700}
+  footer{margin-top:48px;padding-top:14px;border-top:1px solid var(--line);color:var(--muted);font-size:12.5px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>标普500场内基金「真实溢价率」查询平台调研</h1>
+  <div class="sub">调研时间：2026-10-14（A股盘中） · 需求口径：① 二级市场价格 vs 一级市场净值的价差；② 净值 vs 标普500期货的价差（剔除中美交易时段错位造成的信息滞后）</div>
+</header>
+
+<div class="tldr">
+  <h2>结论速览</h2>
+  <ul>
+    <li><b>有现成平台，但没有任何单一平台把「净值 vs 标普500期货」单独列成指标。</b></li>
+    <li>最接近需求的公开平台是 <a href="https://www.haoetf.com/">HaoETF（haoetf.com）</a> 的 QDII 专区：它的「实时估值」明确基于「T-1日估值 + <b>实时期货</b>」修正，页面顶部同时挂着标普500 / 纳指100 / 道指期货实时报价——你要的两段信息在同一个页面上。</li>
+    <li>只覆盖第一段（价格 vs 已公布净值）的：<a href="https://www.jisilu.cn/">集思录</a>（可配「套利工具箱」浏览器插件补实时估算）、<a href="https://www.wise-etf.com/">WiseETF</a>、<a href="https://jinkuaicha.com/">金快查</a>、各家券商 App。</li>
+    <li>若实际交易的是美股 SPY / VOO / IVV：用基金公司官方披露的 premium/discount 表，不存在时差问题。</li>
+    <li>要自己拼第二段：英为财情期货行情 + 人民币汇率中间价 + 官方净值，公式见文末。</li>
+  </ul>
+</div>
+
+<h2 class="sec">1. 平台总览</h2>
+<div class="lead">按「溢价口径」和「是否用标普500期货修正」两个维度横向对比。</div>
+<table>
+  <tr><th>平台</th><th>溢价口径</th><th>期货修正</th><th>覆盖标普500场内基金</th><th>费用 / 刷新</th></tr>
+  <tr>
+    <td><a href="https://www.haoetf.com/">HaoETF</a></td>
+    <td>双口径：实时估值（T-1估值 + 实时期货）与最新估值（T-1口径）</td>
+    <td><span class="tag yes">有</span> 标普500 / 纳指100 / 道指30 / 原油 / 黄金期货</td>
+    <td>513500、159612、159655、513650、161125、161128、161127 等全部 QDII（LOF + ETF）</td>
+    <td>免费 / 分钟级</td>
+  </tr>
+  <tr>
+    <td><a href="https://www.jisilu.cn/">集思录</a><br><a href="https://www.jisilu.cn/data/qdii/">/data/qdii/</a></td>
+    <td>场内价 vs 已公布净值（QDII 净值有 T-1 / T-2 延迟）</td>
+    <td><span class="tag part">间接</span> 「套利工具箱」插件按跟踪指数当日表现注入实时估算溢价率</td>
+    <td>实时数据 → T+0 QDII → 欧美市场（LOF + QDII ETF）</td>
+    <td>免费（登录）/ 交易时段</td>
+  </tr>
+  <tr>
+    <td><a href="https://www.wise-etf.com/">WiseETF</a></td>
+    <td>同日收盘价 / 同日净值；分级预警（&gt;1% 注意、&gt;2% 偏高、&gt;3% 极高）</td>
+    <td><span class="tag no">无</span></td>
+    <td>标普500 / 纳指100 场内 ETF + 场外联接，顺带比申购额度、费率、跟踪误差</td>
+    <td>免费 / 每日（当日动态字段偶有「待确认」）</td>
+  </tr>
+  <tr>
+    <td><a href="https://jinkuaicha.com/">金快查</a></td>
+    <td>ETF 实时折溢价（含跨境 QDII 溢价榜）+ LOF 折溢价监控与套利测算；口径基于已公布净值</td>
+    <td><span class="tag no">无</span></td>
+    <td>全市场 ETF / LOF</td>
+    <td>注册免费 / 约5分钟</td>
+  </tr>
+  <tr>
+    <td>券商 App（东财、同花顺、通达信等）</td>
+    <td>行情页「溢价率」= 现价 / 最新公布净值</td>
+    <td><span class="tag no">无</span></td>
+    <td>全市场</td>
+    <td>免费 / 实时价 + 滞后净值</td>
+  </tr>
+  <tr>
+    <td>Wind / Choice / iFinD</td>
+    <td>可拉历史溢价序列，仍是 T-1 口径</td>
+    <td><span class="tag no">无</span></td>
+    <td>全市场</td>
+    <td>付费终端</td>
+  </tr>
+  <tr>
+    <td><a href="https://www.ssga.com/us/intermediary/etfs/spdr-sp-500-etf-trust-spy">SSGA(SPY)</a> / <a href="https://investor.vanguard.com/investment-products/etfs/profile/voo">Vanguard(VOO)</a> / <a href="https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf">iShares(IVV)</a></td>
+    <td>官方披露 NAV vs 收盘价的 premium/discount 表</td>
+    <td><span class="tag no">无</span>（美股时段同步，不需要）</td>
+    <td>SPY / VOO / IVV</td>
+    <td>免费 / 日·月</td>
+  </tr>
+  <tr>
+    <td>himself65/finance-skills（开源）</td>
+    <td>yfinance 取实时价 + NAV 算溢价，附同类对比、异常筛选</td>
+    <td><span class="tag no">无</span></td>
+    <td>美股 ETF</td>
+    <td>开源 / 实时</td>
+  </tr>
+</table>
+
+<h2 class="sec">2. 重点：HaoETF —— 唯一把实时期货折进估值的公开平台</h2>
+
+<div class="card">
+  <h3>它怎么算（官网口径，见 qdii 页页脚）</h3>
+  <ul class="tight">
+    <li><b>最新估值 / 最新溢价</b>：基于 T-2 日净值 + 跟踪指数，即「T-1 口径」，收盘后可核对。</li>
+    <li><b>实时估值 / 实时溢价</b>：基于「T-1 日估值 + <b>实时期货</b>」滚动修正——A 股交易时段美股现货休市，期货是唯一实时价格代理，这正是你要的第二段逻辑。</li>
+    <li>仓位用移动平均法估算（近期约 95%），汇率用人民币汇率中间价（每日 9:15 更新后重算）。</li>
+    <li>单基金页给出自校验列「估值误差」（估算估值 vs 实际净值，近期多在 ±0.1% 以内）。</li>
+  </ul>
+  <p style="margin-top:8px"><a href="https://www.haoetf.com/qdii/513500">示例页：513500 博时标普500 → haoetf.com/qdii/513500</a></p>
+</div>
+
+<div class="card">
+  <h3>页面上与你的问题直接相关的字段</h3>
+  <ul class="tight">
+    <li>页顶期货快照：标普500指数期货、纳斯达克100指数期货、道琼斯30指数期货、纽约原油、布伦特原油、黄金期货（实时数值 + 涨跌幅）。</li>
+    <li>每只基金：实时估值、实时溢价、最新估值、最新溢价、估值日期、现价、成交额、份额、净值、净值日期、指数涨跌、申购限额、申购/赎回费。</li>
+    <li>单基金页另给：业绩基准、估值基准（SP500 现货点位）、USD 汇率中间价、历史数据表（收盘价 / T-1净值 / T-1估值 / 估值误差 / T-1溢价率 / 份额 / 指数涨跌 / 估算仓位）、基金公司公告（含「溢价风险提示公告」）。</li>
+  </ul>
+</div>
+
+<div class="note"><b>局限：</b>实时估值是估算值而非官方 IOPV；期货修正只能近似（期货含资金成本与情绪因素，与现货指数存在基差）；仓位估算失真时页面自己也提示「估值误差偏大」；跨境 QDII 在 A 股休市时段（15:00–次日9:30）期货仍在交易，实时估值跟着期货走，与次日 A 股开盘价之间仍可能跳空。</div>
+
+<div class="card">
+  <h3>实时快照（2026-10-14 13:47–13:50 逐只抓取，A股盘中；标普500现货 7805.45（10-13收盘），期货 7867.58 +0.15%（13:33口径，期货较现货高 +0.79%）；USD/CNY 中间价 6.7249）</h3>
+  <table class="snapshot">
+    <tr><th>代码</th><th>名称</th><th>现价(涨跌)</th><th>实时估值</th><th>实时溢价<br>(期货修正)</th><th>最新溢价<br>(T-1口径)</th></tr>
+    <tr><td>513500</td><td>博时标普500ETF</td><td>2.742（-0.44%）</td><td>2.4878</td><td class="hot">+10.22%</td><td>+10.28%</td></tr>
+    <tr><td>159612</td><td>国泰标普500ETF</td><td>2.106（+0.05%）</td><td>1.9516</td><td class="hot">+7.91%</td><td>+7.98%</td></tr>
+    <tr><td>159655</td><td>华夏标普500ETF</td><td>2.047（+0.10%）</td><td>1.9040</td><td class="hot">+7.51%</td><td>+7.58%</td></tr>
+    <tr><td>513650</td><td>南方标普500ETF</td><td>2.034（-0.10%）</td><td>1.8940</td><td class="hot">+7.39%</td><td>+7.46%</td></tr>
+    <tr><td>161125</td><td>易方达标普500指数LOF</td><td>3.336（+0.18%）</td><td>3.1824</td><td>+4.83%</td><td>+4.90%</td></tr>
+    <tr><td>161128</td><td>易方达标普信息科技LOF</td><td>7.715（+0.98%）</td><td>7.0394</td><td class="hot">+9.60%</td><td>+9.49%</td></tr>
+    <tr><td>161127</td><td>易方达标普生物科技LOF</td><td>2.016（-1.66%）</td><td>暂无实时估值</td><td>—</td><td>+4.39%</td></tr>
+    <tr><td>161126</td><td>易方达标普医疗保健LOF</td><td>2.162（-0.69%）</td><td>暂无实时估值</td><td>—</td><td>-0.11%</td></tr>
+  </table>
+  <p style="font-size:13px;color:var(--muted)">结构观察：跟踪标普500本指数的 5 只场内基金（4 ETF + 161125 LOF）实时溢价全部在 +4.8%～+10.2%，513500 已连续数月运行在 9%–11%；行业指数分化明显——标普信息科技 +9.6%、标普生物科技 +4.4%、标普医疗保健 -0.1%（基本平价）。溢价刚性来自 QDII 额度稀缺 + 暂停申购，不是短期情绪；基金公司已多次发布溢价风险提示公告（161128 在 10-09、10-12 连发两次）。161126/161127 因不满足实时估算条件，HaoETF 只给 T-1 口径。</p>
+</div>
+
+<h2 class="sec">3. 只覆盖第一段（价格 vs 已公布净值）的工具</h2>
+
+<div class="card">
+  <h3>集思录 + 「套利工具箱」浏览器插件（国内套利圈事实标准入口）</h3>
+  <ul class="tight">
+    <li>站内路径：实时数据 → ETF / T+0 QDII → 欧美市场（<a href="https://www.jisilu.cn/data/qdii/">jisilu.cn/data/qdii/</a>），溢价率按已公布净值计算，QDII 有净值延迟。</li>
+    <li>集思录 2026 年初下线了自家基金估值数据，「套利工具箱」插件（Edge / Chrome 商店可搜）在集思录页面注入「QDII-LOF 实时估值溢价率」：按跟踪指数当日表现估算，弥补 T-2 净值延迟的信息盲区；同时给 LOF/ETF 溢价率增强和「跟踪比」。</li>
+    <li>适合：盘后复盘 + 限购状态 + 份额变动联合判断套利可行性（高溢价 + 限购宽松 = 潜在机会）。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>WiseETF（专做纳指 / 标普500 的场内外路径比较）</h3>
+  <ul class="tight">
+    <li>页面：<a href="https://www.wise-etf.com/today/etf-premium">wise-etf.com/today/etf-premium</a>（溢价榜，可按时点排序）、<a href="https://www.wise-etf.com/chooser">wise-etf.com/chooser</a>（场内 vs 场外路径比较）。</li>
+    <li>口径 = 同日收盘价 / 同日净值；把「今日申购额度、溢价、费率、跟踪误差、成交情况」放在同一页，附带溢价分级预警。</li>
+    <li>注意：当日动态字段有时显示「待确认」，用前先看数据日期。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>金快查（全市场折溢价监控）</h3>
+  <ul class="tight">
+    <li>LOF 全市场折溢价监控 + 套利测算；ETF 全市场实时折溢价、含跨境 QDII 溢价榜；数据来源为东方财富、天天基金、沪深交易所；支持自选与推送提醒，数据约 5 分钟刷新。</li>
+    <li>未披露是否用期货修正实时估值，QDII 部分应按「已公布净值口径」理解。</li>
+  </ul>
+</div>
+
+<div class="card">
+  <h3>券商 App / 付费终端</h3>
+  <ul class="tight">
+    <li>东财、同花顺、通达信、华泰等 App：行情页直接给「溢价率」，均为「现价 / 最新公布净值」，QDII 天然滞后一晚（券商口径亦是 T-1 / T-2）。</li>
+    <li>Wind / Choice / iFinD：适合拉长历史溢价序列做统计，不解决实时性。</li>
+  </ul>
+</div>
+
+<h2 class="sec">4. 美股口径（若实际交易 SPY / IVV / VOO）</h2>
+<div class="card">
+  <ul class="tight">
+    <li>基金公司官网披露官方 premium/discount：<a href="https://www.ssga.com/us/intermediary/etfs/spdr-sp-500-etf-trust-spy">SPY（SSGA）</a>、<a href="https://investor.vanguard.com/investment-products/etfs/profile/voo">VOO（Vanguard）</a>、<a href="https://www.ishares.com/us/products/239726/ishares-core-sp-500-etf">IVV（iShares）</a>；Yahoo Finance 提供 NAV 字段，Morningstar / ETF.com 亦可查。</li>
+    <li>美股 ETF 与成分股同时段交易，溢价通常收敛在 ±0.1% 内，不存在「时差滞后」问题——第二段价差只在跨境 QDII 场景下才有意义。</li>
+    <li>DIY：开源项目 <a href="https://gitcode.com/gh_mirrors/fi/finance-skills">himself65/finance-skills</a> 的 ETF Premium/Discount 技能（基于 yfinance 取价 + NAV），可嵌入 agent 定时跑。</li>
+  </ul>
+</div>
+
+<h2 class="sec">5. 第二段价差的原料：期货行情与汇率</h2>
+<div class="card">
+  <ul class="tight">
+    <li>标普500期货（E-mini / Micro E-mini）：<a href="https://cn.investing.com/indices/us-spx-500-futures">英为财情</a>（延迟约 10–15 分钟）、以及任意行情终端（TradingView、富途、老虎、新浪财经）。</li>
+    <li>汇率：人民币汇率中间价，每日 9:15 披露（HaoETF 即采用此值，2026-10-14 为 6.7249）。</li>
+    <li>官方净值：基金公司官网 / 天天基金，T 日晚间公布（QDII 实际挂牌净值以晚间确认为准）。</li>
+  </ul>
+</div>
+
+<h2 class="sec">6. 自己拼「真实溢价率」的配方</h2>
+<div class="formula">
+<span class="cm"># 盘中实时口径（剔除时差）</span><br>
+实时估值(t) = 官方净值(T-1) × [1 + SP500期货当日涨跌幅 × 估算仓位] × [1 + USD/CNY汇率变动]<br>
+实时溢价率 = 场内现价 ÷ 实时估值(t) − 1<br><br>
+<span class="cm"># 收盘后的「硬」数字</span><br>
+T日真实溢价率 = T日收盘价 ÷ T日晚公布的T日净值 − 1<br><br>
+<span class="cm"># 第二段价差（一级市场 vs 标普500期货）</span><br>
+期货现货价差 = SP500期货点位 − SP500现货点位（基差 + 隔夜累计涨幅）<br>
+今日示例：7867.58 − 7805.45 ≈ +0.79%
+</div>
+<ul class="tight">
+  <li>步骤：① 定时抓英为财情期货价与人民币中间价；② 取官方净值（T-1）与估算仓位；③ 按上式滚估值；④ 与场内实时价比对得「实时溢价率」。</li>
+  <li>校验方法：与实际公布的净值算「估值误差」，误差稳定在 ±0.3% 内说明仓位与汇率假设可用。</li>
+</ul>
+
+<div class="warn"><b>共性注意事项：</b>① 各平台「溢价率」口径不同（T-1 / T-2 / 同日 / 期货修正），数值不可跨平台直接对比，用前先确认数据日期；② QDII 净值延迟 + 限购使溢价具有粘性，513500 已在 5%–11% 运行数月，基金公司多次发布「溢价风险提示公告」；③ 高溢价买入的亏损来源是溢价回落而非指数下跌——判断依据应是「期货修正后的真实溢价率」而非券商 App 里的 T-1 口径数字。</div>
+
+<footer>
+  调研方法：2026-10-14 对各平台首页 / QDII 专区 / 单基金页实时抓取核对口径说明；行情数字为当日盘中快照，仅作口径示例，不构成投资建议。
+</footer>
+
+
+
+</div>
+</body>
+</html>
