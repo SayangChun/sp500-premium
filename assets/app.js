@@ -20,7 +20,6 @@
     es: null, fx: null,               // 实时报价 {price,chg_pct,prev_close,time,source}
     spxKline: {},       // date(美东) -> close，来自东财日线
     data: null,                        // data/sp500.json 快照
-    position: 0.95,
     quoteAt: 0, esAt: 0, navAt: 0,     // 各源最近成功时间(ms)
     src: { quote: null, fut: null, fx: null, nav: null, snap: null },
   };
@@ -205,19 +204,23 @@
     return new Intl.DateTimeFormat("en-CA", { timeZone: "America/New_York" }).format(d);
   }
 
-  /* ---------- 净值：天天基金移动端（跨域） ---------- */
+  /* ---------- 净值：天天基金移动端（跨域），取 40 条历史用于仓位回归 ---------- */
   async function fetchNav() {
     let ok = 0;
     for (const f of FUNDS) {
       try {
         const js = await getJSON(
           "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNHisNetList?FCODE=" + f.code +
-          "&pageIndex=1&pageSize=2&deviceid=1&plat=Android&product=EFund&version=6.2.8&appType=ttjj");
+          "&pageIndex=1&pageSize=40&deviceid=1&plat=Android&product=EFund&version=6.2.8&appType=ttjj");
         if (js && js.Datas && js.Datas[0]) {
-          state.nav[f.code] = { nav: num(js.Datas[0].DWJZ), nav_date: js.Datas[0].FSRQ };
+          state.nav[f.code] = {
+            nav: num(js.Datas[0].DWJZ), nav_date: js.Datas[0].FSRQ,
+            hist: js.Datas.map((d) => ({ date: d.FSRQ, nav: num(d.DWJZ), chg: num(d.JZZZL) })),
+          };
           ok++;
         }
       } catch (e) { /* 单只失败不阻塞 */ }
+      await new Promise((r) => setTimeout(r, 700)); // 节流，避免触发限流
     }
     state.src.nav = ok === FUNDS.length ? "live" : ok > 0 ? "snap" : "down";
     if (ok) state.navAt = Date.now();
@@ -246,6 +249,35 @@
     if (Object.keys(state.spxKline).length) return state.spxKline;
     return (state.data && state.data.market && state.data.market.spx_klines) || {};
   }
+  /* 仓位：净值日涨跌 vs 标普500日涨跌 的滚动回归（带截距 OLS，阈值0.5%，
+     与 scripts/update_data.py 同口径）；算不出时退回 JSON 快照值/95% */
+  function estimatePosition(navHist, spxMap, threshold = 0.005, window = 40, minPoints = 6) {
+    if (!navHist || navHist.length < minPoints + 1 || !spxMap) return null;
+    const ds = Object.keys(spxMap).sort();
+    const spxChg = {};
+    for (let i = 1; i < ds.length; i++) {
+      if (spxMap[ds[i - 1]]) spxChg[ds[i]] = spxMap[ds[i]] / spxMap[ds[i - 1]] - 1;
+    }
+    const hist = [...navHist].sort((a, b) => (a.date < b.date ? -1 : 1));
+    const chgs = {};
+    for (let i = 1; i < hist.length; i++) {
+      const p = hist[i - 1], c = hist[i];
+      chgs[c.date] = c.chg != null ? c.chg / 100 : (p.nav ? c.nav / p.nav - 1 : null);
+    }
+    const pts = [];
+    for (const d of Object.keys(chgs).sort()) {
+      if (d in spxChg && chgs[d] != null && Math.abs(spxChg[d]) >= threshold) pts.push([spxChg[d], chgs[d]]);
+    }
+    const use = pts.slice(-window);
+    if (use.length < minPoints) return null;
+    const n = use.length;
+    const mx = use.reduce((s, p) => s + p[0], 0) / n;
+    const my = use.reduce((s, p) => s + p[1], 0) / n;
+    const sxx = use.reduce((s, p) => s + (p[0] - mx) ** 2, 0);
+    const sxy = use.reduce((s, p) => s + (p[0] - mx) * (p[1] - my), 0);
+    if (sxx <= 0) return null;
+    return Math.min(Math.max(sxy / sxx, 0.85), 1.02);
+  }
   function fundCalc(f) {
     const snap = (state.data && state.data.funds || []).find((x) => x.code === f.code) || {};
     const q = state.quotes[f.code] || {};
@@ -272,9 +304,15 @@
     }
     // 汇率日内变动极小，Yahoo 不可达时按 0 处理（见口径说明）
     const rFx = 0;
+    // 仓位：浏览器端实时回归优先，其次 JSON 快照值，最后 95%
+    const posEst = estimatePosition(state.nav[f.code] && state.nav[f.code].hist, spxMap);
+    const position = posEst != null ? posEst
+      : (snap.position != null ? snap.position : 0.95);
+    const posMethod = posEst != null ? "实时回归"
+      : (snap.position != null && snap.position_method ? "快照" : "默认");
     let estNav = null, premium = null;
     if (nav && price && rIdx != null) {
-      estNav = nav * (1 + rIdx * state.position) * (1 + rFx);
+      estNav = nav * (1 + rIdx * position) * (1 + rFx);
       premium = (price / estNav - 1) * 100;
     }
     // 停牌/无成交：交易时段内成交额为 0 且现价=昨收
@@ -290,7 +328,7 @@
       estNav, premium, naive: nav && price ? (price / nav - 1) * 100 : null,
       hao, quota: hao && hao.quota, esSnap,
       rIdx: rIdx * 100, rOvernight: rOvernight * 100, rToday: rToday * 100,
-      spxLastDate, spxNav,
+      position, posMethod, spxLastDate, spxNav,
     };
   }
 
@@ -371,7 +409,7 @@
         </td>
         <td>
           <div class="price-main">${fmt(r.estNav, 4)}</div>
-          <div class="price-sub">仓位 ${Math.round(state.position * 100)}%</div>
+          <div class="price-sub">仓位 ${(r.position * 100).toFixed(1)}% · ${r.posMethod}</div>
         </td>
         <td class="col-prem">${premTip}</td>
         <td class="muted">${r.naive != null ? pct(r.naive) : "—"}</td>
@@ -389,12 +427,6 @@
     render();
   }
   function init() {
-    const slider = $("pos-slider");
-    slider.addEventListener("input", () => {
-      state.position = +slider.value / 100;
-      $("pos-value").textContent = slider.value + "%";
-      renderTable();
-    });
     refreshAll();
     setInterval(fetchQuotes, IV.quote);
     setInterval(fetchMarket, IV.market);

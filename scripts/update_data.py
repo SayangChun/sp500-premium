@@ -162,20 +162,101 @@ def tencent_time(s):
     return s or None
 
 
-def fetch_nav(code):
-    """天天基金移动端净值历史，取最新一条"""
+_last_req = 0.0
+
+
+def throttled_get(url, **kw):
+    """同一出口对天天基金接口有频率限制，请求间保持 ≥1.2s 间隔"""
+    global _last_req
+    dt = time.time() - _last_req
+    if dt < 2.5:
+        time.sleep(2.5 - dt)
+    _last_req = time.time()
+    return get(url, **kw)
+
+
+def fetch_nav_history(code, size=40):
+    """基金净值历史 [(日期, 单位净值, 日涨跌%), ...] 最新在前。
+    首选 pingzhongdata（一次请求拿全量历史）；失败回退 fundmobapi 移动端接口。"""
+    raw = throttled_get(f"https://fund.eastmoney.com/pingzhongdata/{code}.js",
+                        headers={"Referer": f"https://fund.eastmoney.com/{code}.html"}, pause=2.0)
+    if raw:
+        m = re.search(rb"Data_netWorthTrend\s*=\s*(\[.*?\]);", raw, re.S)
+        if m:
+            try:
+                data = json.loads(m.group(1).decode("utf-8"))
+                out = []
+                for d in data[-size:]:
+                    ts, nav_v = d.get("x"), d.get("y")
+                    if ts is None or nav_v is None:
+                        continue
+                    er = d.get("equityReturn")
+                    out.append((datetime.fromtimestamp(ts / 1000, BJT).strftime("%Y-%m-%d"),
+                                float(nav_v),
+                                None if er in (None, "", "--") else float(er)))
+                if out:
+                    return list(reversed(out))  # 统一为「最新在前」
+            except Exception as e:  # noqa: BLE001
+                log(f"pingzhongdata 解析失败 {code}: {e}")
     url = (
         "https://fundmobapi.eastmoney.com/FundMNewApi/FundMNHisNetList"
-        f"?FCODE={code}&pageIndex=1&pageSize=2&deviceid=1&plat=Android"
+        f"?FCODE={code}&pageIndex=1&pageSize={size}&deviceid=1&plat=Android"
         f"&product=EFund&version=6.2.8&appType=ttjj"
     )
-    js = get_json(url)
-    if not js or not js.get("Datas"):  # 触发反爬时限流时返回 Datas:null，用 curl 强杀一次
-        js = get_json(url, force_curl=True)
-    if js and js.get("Datas"):
-        d = js["Datas"][0]
-        return {"nav": float(d["DWJZ"]), "nav_date": d["FSRQ"], "nav_chg_pct": d.get("JZZZL")}
-    return None
+    for attempt in range(2):
+        js = get_json(throttled_get(url, pause=2.5), retries=0)
+        if not js or not js.get("Datas"):
+            js = get_json(get(url, force_curl=True, pause=2.5), retries=0)
+        if js and js.get("Datas"):
+            out = []
+            for d in js["Datas"]:
+                try:
+                    out.append((d["FSRQ"], float(d["DWJZ"]),
+                                None if d.get("JZZZL") in (None, "", "--") else float(d["JZZZL"])))
+                except (KeyError, TypeError, ValueError):
+                    continue
+            if out:
+                return out
+        time.sleep(3.0 * (attempt + 1))
+    return []
+
+
+def estimate_position(nav_hist, spx_klines, threshold=0.005, window=40, min_points=6):
+    """用「净值日涨跌 vs 标普500日涨跌」滚动回归（带截距 OLS，斜率即实际持仓）。
+    nav_hist 涨跌幅缺失时用相邻净值比值回算。
+    经验参数：只取指数波动 ≥0.5% 的交易日——小波动日的比值被管理费/汇兑/申赎冲击
+    污染严重（实测 ≥0.3% 阈值斜率被压到 0.87，≥0.5% 为 0.933，≥0.8% 为 0.96，
+    R² 随阈值升高到 0.99，与 HaoETF 移动平均估算的 94~95% 互证）。"""
+    closes = dict(spx_klines)
+    dates = sorted(closes)
+    spx_chg = {}
+    for i in range(1, len(dates)):
+        d0, d1 = dates[i - 1], dates[i]
+        if closes.get(d0):
+            spx_chg[d1] = closes[d1] / closes[d0] - 1
+    hist = sorted(nav_hist, key=lambda x: x[0])
+    chgs = {}
+    for i in range(1, len(hist)):
+        d0, n0, c0 = hist[i - 1]
+        d1, n1, c1 = hist[i]
+        if c1 is not None:
+            chgs[d1] = c1 / 100.0
+        elif n0:
+            chgs[d1] = n1 / n0 - 1
+    pts = [(spx_chg[d], chgs[d]) for d in sorted(chgs)
+           if d in spx_chg and abs(spx_chg[d]) >= threshold][-window:]
+    n = len(pts)
+    if n < min_points:
+        return None, n
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    mx, my = sum(xs) / n, sum(ys) / n
+    sxx = sum((x - mx) ** 2 for x in xs)
+    sxy = sum((x - mx) * (y - my) for x, y in zip(xs, ys))
+    if sxx <= 0:
+        return None, n
+    b = sxy / sxx
+    return round(min(max(b, 0.85), 1.02), 4), n
 
 
 def yahoo(symbol, range_="1d", interval="1m"):
@@ -206,7 +287,7 @@ def yahoo_quote(symbol):
     return {"price": price, "chg_pct": chg, "time": bjt_str(ts), "daily": daily}
 
 
-def fetch_spx_klines(limit=12):
+def fetch_spx_klines(limit=35):
     """标普500现货日线（东财，secid=100.SPX，按美东日期）→ [(date, close), ...]
     该接口对连续请求限流（实测成功率约60%），需独立退避重试；仍失败则由调用方沿用上次快照。"""
     url = (
@@ -293,6 +374,16 @@ def fetch_haoetf(code):
             if c and re.search(r"暂停申购|无限制|^\d+(元|万)|限额", c):
                 out["quota"] = c
                 break
+        # 历史数据表按日期倒序；第 i 行的「T-1日净值」对应的是下一行(row_dates[i+1])的交易日
+        # （row 10-14 的 T-1 净值 = 10-13 的 NAV），据此还原 NAV 的真实日期
+        for i in range(len(row_dates) - 1):
+            cells_h = row_dates[i][1]
+            nv_v = num(cells_h[2])
+            if nv_v is not None:
+                nav_hist.append((row_dates[i + 1][0], nv_v, None))
+            if re.match(r"^\d+(\.\d+)?%$", cells_h[-1] or ""):
+                out["position"] = float(cells_h[-1][:-1])
+        out["nav_hist"] = nav_hist
         return out
     except Exception as e:  # noqa: BLE001
         log(f"HaoETF解析失败 {code}: {e}")
@@ -371,8 +462,14 @@ def build():
         q = quotes.get(f["code"], {})
         log(f"  {f['code']} {f['name']}…")
         hao = fetch_haoetf(f["code"])
-        nv = fetch_nav(f["code"])
+        if not hao:  # HaoETF 瞬时失败时补一次
+            time.sleep(4)
+            hao = fetch_haoetf(f["code"])
+        nv_hist = fetch_nav_history(f["code"])
         nav_src = "fundmobapi"
+        nv = None
+        if nv_hist:
+            nv = {"nav": nv_hist[0][1], "nav_date": nv_hist[0][0], "nav_chg_pct": nv_hist[0][2]}
         if not nv and q.get("nav"):  # fundmobapi 被限流时用腾讯净值字段，日期取 HaoETF/上次快照
             nv = {"nav": q.get("nav"),
                   "nav_date": (hao or {}).get("nav_date") or prev_dates.get(f["code"]),
@@ -383,9 +480,16 @@ def build():
             nav_src = "haoetf"
         nav = nv["nav"] if nv else None
         nav_date = nv["nav_date"] if nv else None
-        pos = POSITION_DEFAULT
-        if hao and hao.get("position"):
-            pos = hao["position"] / 100.0
+        # 仓位：净值涨跌 vs 指数涨跌 的滚动回归估算（无人工输入）；依次兜底
+        pos, pos_n = estimate_position(nv_hist, spx_klines)
+        pos_method = "rolling_ols"
+        if pos is None and hao and hao.get("nav_hist"):
+            pos, pos_n = estimate_position(hao["nav_hist"], spx_klines)
+            pos_method = "rolling_ols"
+        if pos is None and hao and hao.get("position"):
+            pos, pos_method, pos_n = hao["position"] / 100.0, "haoetf_est", None
+        if pos is None:
+            pos, pos_method, pos_n = POSITION_DEFAULT, "default", None
         # 行情优先东财/腾讯；都被限流时退回 HaoETF 行内自带的现价
         price = q.get("price") if q.get("price") else (hao or {}).get("price")
         chg_pct = q.get("chg_pct") if q.get("chg_pct") is not None else (hao or {}).get("chg_pct")
@@ -417,6 +521,8 @@ def build():
             "nav_date": nav_date,
             "nav_chg_pct": nv.get("nav_chg_pct") if nv else None,
             "position": pos,
+            "position_method": pos_method,
+            "position_points": pos_n,
             "r_idx_parts": r_idx_parts,
             "est_nav": round(est, 4) if est else None,
             "premium_pct": round(prem, 2) if prem is not None else None,
