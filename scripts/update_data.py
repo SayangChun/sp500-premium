@@ -206,17 +206,24 @@ def yahoo_quote(symbol):
     return {"price": price, "chg_pct": chg, "time": bjt_str(ts), "daily": daily}
 
 
-def fetch_spx_spot():
-    """标普500现货最近收盘（东财日线，secid=100.SPX）"""
+def fetch_spx_klines(limit=12):
+    """标普500现货日线（东财，secid=100.SPX，按美东日期）→ [(date, close), ...]
+    该接口对连续请求限流（实测成功率约60%），需独立退避重试；仍失败则由调用方沿用上次快照。"""
     url = (
         "https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=100.SPX"
-        "&fields1=f1,f2&fields2=f51,f53&klt=101&fqt=0&end=20500101&lmt=3"
+        "&fields1=f1,f2&fields2=f51,f53&klt=101&fqt=0&end=20500101&lmt=%d" % limit
     )
-    js = get_json(url)
-    if js and js.get("data", {}).get("klines"):
-        date, close = js["data"]["klines"][-1].split(",")
-        return {"price": float(close), "date": date}
-    return None
+    for attempt in range(4):
+        js = get_json(url, retries=1, pause=1.5)
+        out = []
+        if js and js.get("data", {}).get("klines"):
+            for line in js["data"]["klines"]:
+                date, close = line.split(",")
+                out.append((date, float(close)))
+            if out:
+                return out
+        time.sleep(2.5 * (attempt + 1))
+    return []
 
 
 # ---------------------------------------------------------------- HaoETF 对照
@@ -312,16 +319,52 @@ def load_prev():
         return {}
 
 
+def tencent_es_quote():
+    """腾讯 hf_ES 实时快照（Yahoo 不可用时的第一兜底）"""
+    raw = get("https://qt.gtimg.cn/q=hf_ES")
+    if not raw:
+        return None
+    m = re.search(r'v_hf_ES="([^"]*)"', raw.decode("utf-8", "replace"))
+    if not m:
+        return None
+    a = m.group(1).split(",")
+    if len(a) < 8 or not a[0]:
+        return None
+    return {"price": num(a[0]), "chg_pct": num(a[1]),
+            "time": (f"{a[12]} {a[6]}" if len(a) > 12 else a[6]), "prev_close": num(a[7])}
+
+
 def build():
     prev = load_prev()
     prev_dates = {f.get("code"): f.get("nav_date") for f in prev.get("funds", [])}
     log("抓取场内行情（东方财富→腾讯）…")
     quotes = fetch_quotes()
-    log("抓取期货/汇率（Yahoo）…")
-    es = yahoo_quote("ES=F")
+    log("抓取 ES 期货实时价（腾讯 hf_ES 优先，Yahoo 兜底）…")
+    tq = tencent_es_quote()
+    es_price = es_prev = es_chg = es_time = None
+    es_src = "tencent" if tq else "none"
+    if tq:
+        es_price, es_prev, es_chg, es_time = tq["price"], tq["prev_close"], tq["chg_pct"], tq["time"]
+    else:
+        yq = yahoo_quote("ES=F")
+        if yq.get("price"):
+            es_price, es_chg, es_time, es_src = yq["price"], yq["chg_pct"], yq.get("time"), "yahoo"
+        else:
+            es_price = (prev.get("market", {}).get("es_futures") or {}).get("price")
+            es_src = "snapshot"
+    log("抓取汇率（Yahoo，失败则按 0 变动）…")
     fx = yahoo_quote("CNY=X")
-    log("抓取标普500现货收盘（东方财富）…")
-    spx = fetch_spx_spot()
+    fx_price, fx_src = fx.get("price"), ("Yahoo" if fx.get("price") else "none")
+    if not fx_price:
+        fx_price = (prev.get("market", {}).get("fx") or {}).get("price")
+        fx_src = fx_src if fx_price else "snapshot"
+    log("抓取标普500现货日线（东方财富）…")
+    spx_klines = fetch_spx_klines()
+    if not spx_klines:  # 限流等瞬时失败时沿用上次快照的日线（隔夜段锚点）
+        prev_spx = (prev.get("market", {}).get("spx_klines") or {})
+        spx_klines = sorted(((d, float(c)) for d, c in prev_spx.items()))
+    spx_map = dict(spx_klines)
+    spx_last_date, spx_last_close = spx_klines[-1] if spx_klines else (None, None)
 
     funds = []
     for f in FUNDS:
@@ -340,8 +383,6 @@ def build():
             nav_src = "haoetf"
         nav = nv["nav"] if nv else None
         nav_date = nv["nav_date"] if nv else None
-        es_ref, es_ref_date = pick_ref(es["daily"], nav_date) if nav_date else (None, None)
-        fx_ref, fx_ref_date = pick_ref(fx["daily"], nav_date) if nav_date else (None, None)
         pos = POSITION_DEFAULT
         if hao and hao.get("position"):
             pos = hao["position"] / 100.0
@@ -350,10 +391,18 @@ def build():
         chg_pct = q.get("chg_pct") if q.get("chg_pct") is not None else (hao or {}).get("chg_pct")
         amount = q.get("amount") or (hao or {}).get("amount")
         quote_time = q.get("quote_time") or (hao or {}).get("updated")
+        # 两段式指数变动：①隔夜段（净值日→最近美股收盘，标普现货日线）②今日段（期货实时÷昨结）
+        r_idx = r_idx_parts = None
+        if es_price and nav_date and spx_map.get(nav_date) and spx_last_close:
+            overnight = spx_last_close / spx_map[nav_date] - 1
+            today = (es_price / es_prev - 1) if es_prev else 0.0
+            r_idx = overnight + today
+            r_idx_parts = {"overnight": round(overnight * 100, 3), "today": round(today * 100, 3)}
+        r_fx = 0.0  # 汇率日内变动极小，且 Yahoo 有时不可达；有值时也钳制在 ±0.5%
+        if fx_price and nav_date and (fx.get("daily") or {}).get(nav_date):
+            r_fx = clamp(fx_price / fx["daily"][nav_date] - 1)
         est = prem = None
-        if nav and price and es_ref:
-            r_idx = (es["price"] / es_ref - 1) if es.get("price") else 0.0
-            r_fx = clamp(fx["price"] / fx_ref - 1) if (fx.get("price") and fx_ref) else 0.0
+        if nav and price and r_idx is not None:
             est = nav * (1 + r_idx * pos) * (1 + r_fx)
             prem = (price / est - 1) * 100
         funds.append({
@@ -368,10 +417,7 @@ def build():
             "nav_date": nav_date,
             "nav_chg_pct": nv.get("nav_chg_pct") if nv else None,
             "position": pos,
-            "es_ref": es_ref,
-            "es_ref_date": es_ref_date,
-            "fx_ref": fx_ref,
-            "fx_ref_date": fx_ref_date,
+            "r_idx_parts": r_idx_parts,
             "est_nav": round(est, 4) if est else None,
             "premium_pct": round(prem, 2) if prem is not None else None,
             "naive_premium_pct": round((price / nav - 1) * 100, 2) if (price and nav) else None,
@@ -381,14 +427,19 @@ def build():
     data = {
         "generated_at": datetime.now(BJT).strftime("%Y-%m-%dT%H:%M:%S+08:00"),
         "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
-        "config": {"position_default": POSITION_DEFAULT, "formula": "est_nav = nav × (1 + Δ期货 × 仓位) × (1 + Δ汇率)；premium = 现价 / est_nav - 1"},
+        "config": {
+            "position_default": POSITION_DEFAULT,
+            "formula": "r_idx = (标普现货最近收盘/净值日收盘 − 1) + (ES期货实时/期货昨结 − 1)；"
+                       "est_nav = nav × (1 + r_idx × 仓位) × (1 + Δ汇率)；premium = 现价 / est_nav − 1",
+        },
         "market": {
-            "es_futures": {"name": "E-mini S&P 500（12月）", "price": es.get("price"),
-                           "chg_pct": es.get("chg_pct"), "time": es.get("time"),
-                           "daily": es.get("daily", {})},
-            "fx": {"name": "USD/CNY", "price": fx.get("price"), "time": fx.get("time"),
-                   "daily": fx.get("daily", {})},
-            "spx_spot": spx,
+            "es_futures": {"name": "E-mini S&P 500（12月）", "source": es_src,
+                           "price": es_price, "prev_close": es_prev,
+                           "chg_pct": es_chg, "time": es_time},
+            "fx": {"name": "USD/CNY", "source": fx_src, "price": fx_price,
+                   "time": fx.get("time")},
+            "spx_klines": spx_map,
+            "spx_last": {"date": spx_last_date, "close": spx_last_close},
         },
         "funds": funds,
     }
@@ -411,8 +462,8 @@ if __name__ == "__main__":
     d = build()
     print(f"\n生成时间: {d['generated_at']}")
     m = d["market"]
-    print(f"ES期货 {m['es_futures']['price']} ({m['es_futures']['chg_pct']}%)  "
-          f"USD/CNY {m['fx']['price']}  SPX收盘 {m['spx_spot']}")
+    print(f"ES期货 {m['es_futures']['price']} ({m['es_futures']['source']})  "
+          f"USD/CNY {m['fx']['price']}  SPX收盘 {m['spx_last']}")
     print(f"{'代码':<8}{'名称':<14}{'现价':>7}{'净值':>8}{'估算净值':>9}{'真实溢价':>9}  对照(HaoETF)")
     for f in d["funds"]:
         h = f.get("haoetf") or {}
