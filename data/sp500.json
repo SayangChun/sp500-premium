@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-15T16:31:20+08:00",
+  "generated_at": "2026-10-15T18:04:11+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -9,16 +9,16 @@
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
       "source": "tencent",
-      "price": 7742.61,
+      "price": 7744.74,
       "prev_close": 7770.25,
-      "chg_pct": -0.36,
-      "time": "2026-10-15 16:30:08"
+      "chg_pct": -0.33,
+      "time": "2026-10-15 18:03:04"
     },
     "fx": {
       "name": "USD/CNY",
       "source": "Yahoo",
-      "price": 6.6908,
-      "time": "2026-10-15 16:30:25"
+      "price": 6.6805,
+      "time": "2026-10-15 18:00:46"
     },
     "spx_klines": {
       "2026-08-26": 7675.7,
@@ -83,10 +83,10 @@
       "position_points": 11,
       "r_idx_parts": {
         "overnight": -1.108,
-        "today": -0.356
+        "today": -0.328
       },
-      "est_nav": 2.4522,
-      "premium_pct": 8.43,
+      "est_nav": 2.449,
+      "premium_pct": 8.57,
       "naive_premium_pct": 6.93,
       "haoetf": null
     },
@@ -110,10 +110,10 @@
       "position_points": 11,
       "r_idx_parts": {
         "overnight": -1.108,
-        "today": -0.356
+        "today": -0.328
       },
-      "est_nav": 1.9236,
-      "premium_pct": 7.24,
+      "est_nav": 1.9212,
+      "premium_pct": 7.38,
       "naive_premium_pct": 5.76,
       "haoetf": null
     },
@@ -137,10 +137,10 @@
       "position_points": 11,
       "r_idx_parts": {
         "overnight": -1.108,
-        "today": -0.356
+        "today": -0.328
       },
-      "est_nav": 1.8779,
-      "premium_pct": 6.61,
+      "est_nav": 1.8755,
+      "premium_pct": 6.74,
       "naive_premium_pct": 5.16,
       "haoetf": null
     },
@@ -164,10 +164,10 @@
       "position_points": 11,
       "r_idx_parts": {
         "overnight": -1.108,
-        "today": -0.356
+        "today": -0.328
       },
-      "est_nav": 1.8667,
-      "premium_pct": 6.66,
+      "est_nav": 1.8643,
+      "premium_pct": 6.79,
       "naive_premium_pct": 5.19,
       "haoetf": null
     },
@@ -191,10 +191,10 @@
       "position_points": 11,
       "r_idx_parts": {
         "overnight": -1.108,
-        "today": -0.356
+        "today": -0.328
       },
-      "est_nav": 3.1386,
-      "premium_pct": 4.06,
+      "est_nav": 3.1345,
+      "premium_pct": 4.2,
       "naive_premium_pct": 2.69,
       "haoetf": null
     }
