@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-28T04:15:56+08:00",
+  "generated_at": "2026-10-28T12:08:28+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -9,16 +9,16 @@
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
       "source": "tencent",
-      "price": 7761.48,
-      "prev_close": 7714.5,
-      "chg_pct": 0.61,
-      "time": "2026-10-28 04:15:07"
+      "price": 7763.51,
+      "prev_close": 7758.25,
+      "chg_pct": 0.07,
+      "time": "2026-10-28 12:06:55"
     },
     "fx": {
       "name": "USD/CNY",
       "source": "Yahoo",
-      "price": 6.6558,
-      "time": "2026-10-28 02:52:12"
+      "price": 6.6666,
+      "time": "2026-10-28 12:07:03"
     },
     "spx_klines": {
       "2026-09-09": 7636.36,
@@ -69,10 +69,10 @@
       "company": "博时基金",
       "market": "SH",
       "secid": "1.513500",
-      "price": 2.664,
-      "chg_pct": 0.00061,
+      "price": 2.694,
+      "chg_pct": 0.0003,
       "amount": null,
-      "quote_time": "2026-10-27 16:11:56",
+      "quote_time": "2026-10-28 12:06:39",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 2.4379,
@@ -83,11 +83,11 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.597,
-        "today": 0.609
+        "today": 0.068
       },
-      "est_nav": 2.4665,
-      "premium_pct": 8.01,
-      "naive_premium_pct": 9.27,
+      "est_nav": 2.4524,
+      "premium_pct": 9.85,
+      "naive_premium_pct": 10.5,
       "haoetf": null
     },
     {
@@ -96,10 +96,10 @@
       "company": "国泰基金",
       "market": "SZ",
       "secid": "0.159612",
-      "price": 2.06,
-      "chg_pct": 0.00023,
+      "price": 2.08,
+      "chg_pct": 0.0002,
       "amount": null,
-      "quote_time": "2026-10-27 15:34:21",
+      "quote_time": "2026-10-28 12:06:21",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 1.9126,
@@ -110,11 +110,11 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.597,
-        "today": 0.609
+        "today": 0.068
       },
-      "est_nav": 1.935,
-      "premium_pct": 6.46,
-      "naive_premium_pct": 7.71,
+      "est_nav": 1.924,
+      "premium_pct": 8.11,
+      "naive_premium_pct": 8.75,
       "haoetf": null
     },
     {
@@ -123,10 +123,10 @@
       "company": "华夏基金",
       "market": "SZ",
       "secid": "0.159655",
-      "price": 1.995,
-      "chg_pct": 0.00026,
+      "price": 2.016,
+      "chg_pct": 0.00021,
       "amount": null,
-      "quote_time": "2026-10-27 15:34:45",
+      "quote_time": "2026-10-28 12:06:42",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 1.8632,
@@ -137,11 +137,11 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.597,
-        "today": 0.609
+        "today": 0.068
       },
-      "est_nav": 1.8852,
-      "premium_pct": 5.82,
-      "naive_premium_pct": 7.07,
+      "est_nav": 1.8744,
+      "premium_pct": 7.56,
+      "naive_premium_pct": 8.2,
       "haoetf": null
     },
     {
@@ -150,10 +150,10 @@
       "company": "南方基金",
       "market": "SH",
       "secid": "1.513650",
-      "price": 1.985,
-      "chg_pct": 0.00032,
+      "price": 2.009,
+      "chg_pct": 0.00024,
       "amount": null,
-      "quote_time": "2026-10-27 16:11:32",
+      "quote_time": "2026-10-28 12:06:42",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 1.8575,
@@ -164,11 +164,11 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.597,
-        "today": 0.609
+        "today": 0.068
       },
-      "est_nav": 1.8791,
-      "premium_pct": 5.63,
-      "naive_premium_pct": 6.86,
+      "est_nav": 1.8685,
+      "premium_pct": 7.52,
+      "naive_premium_pct": 8.16,
       "haoetf": null
     },
     {
@@ -177,10 +177,10 @@
       "company": "易方达基金",
       "market": "SZ",
       "secid": "0.161125",
-      "price": 3.251,
-      "chg_pct": 0.00029,
+      "price": 3.286,
+      "chg_pct": 0.00035000000000000005,
       "amount": null,
-      "quote_time": "2026-10-27 15:34:57",
+      "quote_time": "2026-10-28 12:06:15",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 3.1243,
@@ -191,11 +191,11 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.597,
-        "today": 0.609
+        "today": 0.068
       },
-      "est_nav": 3.1588,
-      "premium_pct": 2.92,
-      "naive_premium_pct": 4.06,
+      "est_nav": 3.1417,
+      "premium_pct": 4.59,
+      "naive_premium_pct": 5.18,
       "haoetf": null
     }
   ]
