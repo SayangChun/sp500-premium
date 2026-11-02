@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-02T20:53:06+08:00",
+  "generated_at": "2026-11-03T00:41:38+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -9,16 +9,16 @@
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
       "source": "tencent",
-      "price": 7637.08,
+      "price": 7652.62,
       "prev_close": 7614.0,
-      "chg_pct": 0.3,
-      "time": "2026-11-02 20:52:08"
+      "chg_pct": 0.51,
+      "time": "2026-11-03 00:40:07"
     },
     "fx": {
       "name": "USD/CNY",
       "source": "Yahoo",
       "price": 6.6367,
-      "time": "2026-11-02 20:52:29"
+      "time": "2026-11-03 00:36:38"
     },
     "spx_klines": {
       "2026-09-14": 7619.98,
@@ -70,10 +70,10 @@
       "market": "SH",
       "secid": "1.513500",
       "price": 2.654,
-      "chg_pct": -3e-05,
-      "amount": null,
-      "quote_time": "2026-11-02 16:11:33",
-      "quote_source": "push2",
+      "chg_pct": -0.11,
+      "amount": 296000000.0,
+      "quote_time": "2026-11-02 16:14:39",
+      "quote_source": "tencent",
       "nav_source": "fundmobapi",
       "nav": 2.4061,
       "nav_date": "2026-10-30",
@@ -83,10 +83,10 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.0,
-        "today": 0.303
+        "today": 0.507
       },
-      "est_nav": 2.4133,
-      "premium_pct": 9.98,
+      "est_nav": 2.4181,
+      "premium_pct": 9.76,
       "naive_premium_pct": 10.3,
       "haoetf": null
     },
@@ -98,9 +98,9 @@
       "secid": "0.159612",
       "price": 2.047,
       "chg_pct": 0.0,
-      "amount": null,
-      "quote_time": "2026-11-02 15:34:00",
-      "quote_source": "push2",
+      "amount": 40820000.0,
+      "quote_time": "2026-11-02 16:15:00",
+      "quote_source": "tencent",
       "nav_source": "fundmobapi",
       "nav": 1.8876,
       "nav_date": "2026-10-30",
@@ -110,10 +110,10 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.0,
-        "today": 0.303
+        "today": 0.507
       },
-      "est_nav": 1.8932,
-      "premium_pct": 8.12,
+      "est_nav": 1.897,
+      "premium_pct": 7.91,
       "naive_premium_pct": 8.44,
       "haoetf": null
     },
@@ -124,24 +124,24 @@
       "market": "SZ",
       "secid": "0.159655",
       "price": 1.982,
-      "chg_pct": -2e-05,
-      "amount": null,
-      "quote_time": "2026-11-02 15:34:36",
-      "quote_source": "push2",
+      "chg_pct": -0.1,
+      "amount": 203750000.0,
+      "quote_time": "2026-11-02 16:14:45",
+      "quote_source": "tencent",
       "nav_source": "fundmobapi",
-      "nav": 1.872,
-      "nav_date": "2026-10-29",
-      "nav_chg_pct": -0.38,
-      "position": 0.9704,
+      "nav": 1.8366,
+      "nav_date": "2026-10-30",
+      "nav_chg_pct": -1.89,
+      "position": 0.9876,
       "position_method": "rolling_ols",
-      "position_points": 12,
+      "position_points": 13,
       "r_idx_parts": {
-        "overnight": -1.818,
-        "today": 0.303
+        "overnight": 0.0,
+        "today": 0.507
       },
-      "est_nav": 1.8378,
-      "premium_pct": 7.85,
-      "naive_premium_pct": 5.88,
+      "est_nav": 1.8458,
+      "premium_pct": 7.38,
+      "naive_premium_pct": 7.92,
       "haoetf": null
     },
     {
@@ -151,10 +151,10 @@
       "market": "SH",
       "secid": "1.513650",
       "price": 1.983,
-      "chg_pct": 1e-05,
-      "amount": null,
-      "quote_time": "2026-11-02 16:11:40",
-      "quote_source": "push2",
+      "chg_pct": 0.05,
+      "amount": 511170000.0,
+      "quote_time": "2026-11-02 16:14:40",
+      "quote_source": "tencent",
       "nav_source": "fundmobapi",
       "nav": 1.8333,
       "nav_date": "2026-10-30",
@@ -164,10 +164,10 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.0,
-        "today": 0.303
+        "today": 0.507
       },
-      "est_nav": 1.8387,
-      "premium_pct": 7.85,
+      "est_nav": 1.8424,
+      "premium_pct": 7.63,
       "naive_premium_pct": 8.17,
       "haoetf": null
     },
@@ -178,10 +178,10 @@
       "market": "SZ",
       "secid": "0.161125",
       "price": 3.243,
-      "chg_pct": -0.00013,
-      "amount": null,
-      "quote_time": "2026-11-02 15:34:24",
-      "quote_source": "push2",
+      "chg_pct": -0.4,
+      "amount": 16360000.0,
+      "quote_time": "2026-11-02 16:14:24",
+      "quote_source": "tencent",
       "nav_source": "fundmobapi",
       "nav": 3.0859,
       "nav_date": "2026-10-30",
@@ -191,10 +191,10 @@
       "position_points": 13,
       "r_idx_parts": {
         "overnight": 0.0,
-        "today": 0.303
+        "today": 0.507
       },
-      "est_nav": 3.0945,
-      "premium_pct": 4.8,
+      "est_nav": 3.1004,
+      "premium_pct": 4.6,
       "naive_premium_pct": 5.09,
       "haoetf": null
     }
