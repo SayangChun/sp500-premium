@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-18T13:59:36+08:00",
+  "generated_at": "2026-11-18T16:00:26+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -9,16 +9,16 @@
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
       "source": "tencent",
-      "price": 7375.04,
+      "price": 7405.4,
       "prev_close": 7359.0,
-      "chg_pct": 0.22,
-      "time": "2026-11-18 13:59:05"
+      "chg_pct": 0.63,
+      "time": "2026-11-18 15:59:11"
     },
     "fx": {
       "name": "USD/CNY",
       "source": "Yahoo",
-      "price": 6.6654,
-      "time": "2026-11-18 13:59:01"
+      "price": 6.6649,
+      "time": "2026-11-18 16:00:01"
     },
     "spx_klines": {
       "2026-09-30": 7651.54,
@@ -69,10 +69,10 @@
       "company": "博时基金",
       "market": "SH",
       "secid": "1.513500",
-      "price": 2.579,
-      "chg_pct": 6e-05,
+      "price": 2.567,
+      "chg_pct": -6e-05,
       "amount": null,
-      "quote_time": "2026-11-18 13:59:07",
+      "quote_time": "2026-11-18 16:00:01",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 2.355,
@@ -83,11 +83,11 @@
       "position_points": 15,
       "r_idx_parts": {
         "overnight": -1.026,
-        "today": 0.218
+        "today": 0.631
       },
-      "est_nav": 2.3362,
-      "premium_pct": 10.39,
-      "naive_premium_pct": 9.51,
+      "est_nav": 2.3458,
+      "premium_pct": 9.43,
+      "naive_premium_pct": 9.0,
       "haoetf": null
     },
     {
@@ -96,10 +96,10 @@
       "company": "国泰基金",
       "market": "SZ",
       "secid": "0.159612",
-      "price": 2.011,
-      "chg_pct": 3e-05,
+      "price": 2.008,
+      "chg_pct": 0.0,
       "amount": null,
-      "quote_time": "2026-11-18 13:58:42",
+      "quote_time": "2026-11-18 15:34:12",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 1.8473,
@@ -110,11 +110,11 @@
       "position_points": 15,
       "r_idx_parts": {
         "overnight": -1.026,
-        "today": 0.218
+        "today": 0.631
       },
-      "est_nav": 1.8325,
-      "premium_pct": 9.74,
-      "naive_premium_pct": 8.86,
+      "est_nav": 1.8401,
+      "premium_pct": 9.12,
+      "naive_premium_pct": 8.7,
       "haoetf": null
     },
     {
@@ -126,7 +126,7 @@
       "price": 1.941,
       "chg_pct": 4e-05,
       "amount": null,
-      "quote_time": "2026-11-18 13:59:06",
+      "quote_time": "2026-11-18 15:34:18",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 1.8015,
@@ -137,10 +137,10 @@
       "position_points": 15,
       "r_idx_parts": {
         "overnight": -1.026,
-        "today": 0.218
+        "today": 0.631
       },
-      "est_nav": 1.787,
-      "premium_pct": 8.62,
+      "est_nav": 1.7944,
+      "premium_pct": 8.17,
       "naive_premium_pct": 7.74,
       "haoetf": null
     },
@@ -153,7 +153,7 @@
       "price": 1.935,
       "chg_pct": 5e-05,
       "amount": null,
-      "quote_time": "2026-11-18 13:59:07",
+      "quote_time": "2026-11-18 15:59:37",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 1.794,
@@ -164,10 +164,10 @@
       "position_points": 15,
       "r_idx_parts": {
         "overnight": -1.026,
-        "today": 0.218
+        "today": 0.631
       },
-      "est_nav": 1.7796,
-      "premium_pct": 8.73,
+      "est_nav": 1.787,
+      "premium_pct": 8.28,
       "naive_premium_pct": 7.86,
       "haoetf": null
     },
@@ -177,10 +177,10 @@
       "company": "易方达基金",
       "market": "SZ",
       "secid": "0.161125",
-      "price": 3.171,
-      "chg_pct": -3e-05,
+      "price": 3.169,
+      "chg_pct": -5e-05,
       "amount": null,
-      "quote_time": "2026-11-18 13:58:51",
+      "quote_time": "2026-11-18 15:34:48",
       "quote_source": "push2",
       "nav_source": "fundmobapi",
       "nav": 3.023,
@@ -191,11 +191,11 @@
       "position_points": 15,
       "r_idx_parts": {
         "overnight": -1.026,
-        "today": 0.218
+        "today": 0.631
       },
-      "est_nav": 3.0002,
-      "premium_pct": 5.69,
-      "naive_premium_pct": 4.9,
+      "est_nav": 3.0119,
+      "premium_pct": 5.22,
+      "naive_premium_pct": 4.83,
       "haoetf": null
     }
   ]
