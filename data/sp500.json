@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-19T23:38:07+08:00",
+  "generated_at": "2026-11-20T06:46:24+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -9,16 +9,16 @@
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
       "source": "tencent",
-      "price": 7312.17,
+      "price": 7181.17,
       "prev_close": 7340.5,
-      "chg_pct": -0.39,
-      "time": "2026-11-19 23:37:03"
+      "chg_pct": -2.17,
+      "time": "2026-11-20 05:59:59"
     },
     "fx": {
       "name": "USD/CNY",
       "source": "Yahoo",
-      "price": 6.6738,
-      "time": "2026-11-19 23:36:25"
+      "price": 6.6665,
+      "time": "2026-11-20 04:27:47"
     },
     "spx_klines": {
       "2026-10-02": 7722.72,
@@ -55,11 +55,11 @@
       "2026-11-16": 7416.59,
       "2026-11-17": 7340.53,
       "2026-11-18": 7323.63,
-      "2026-11-19": 7293.6
+      "2026-11-19": 7175.83
     },
     "spx_last": {
       "date": "2026-11-19",
-      "close": 7293.6
+      "close": 7175.83
     }
   },
   "funds": [
@@ -82,11 +82,11 @@
       "position_method": "rolling_ols",
       "position_points": 16,
       "r_idx_parts": {
-        "overnight": -0.41,
-        "today": -0.386
+        "overnight": -2.018,
+        "today": -2.171
       },
-      "est_nav": 2.3058,
-      "premium_pct": 11.46,
+      "est_nav": 2.226,
+      "premium_pct": 15.46,
       "naive_premium_pct": 10.56,
       "haoetf": null
     },
@@ -109,11 +109,11 @@
       "position_method": "rolling_ols",
       "position_points": 16,
       "r_idx_parts": {
-        "overnight": -0.41,
-        "today": -0.386
+        "overnight": -2.018,
+        "today": -2.171
       },
-      "est_nav": 1.8087,
-      "premium_pct": 11.02,
+      "est_nav": 1.7461,
+      "premium_pct": 15.0,
       "naive_premium_pct": 10.12,
       "haoetf": null
     },
@@ -136,11 +136,11 @@
       "position_method": "rolling_ols",
       "position_points": 16,
       "r_idx_parts": {
-        "overnight": -0.41,
-        "today": -0.386
+        "overnight": -2.018,
+        "today": -2.171
       },
-      "est_nav": 1.7635,
-      "premium_pct": 10.07,
+      "est_nav": 1.7019,
+      "premium_pct": 14.05,
       "naive_premium_pct": 9.17,
       "haoetf": null
     },
@@ -163,11 +163,11 @@
       "position_method": "rolling_ols",
       "position_points": 16,
       "r_idx_parts": {
-        "overnight": -0.41,
-        "today": -0.386
+        "overnight": -2.018,
+        "today": -2.171
       },
-      "est_nav": 1.7567,
-      "premium_pct": 9.92,
+      "est_nav": 1.6959,
+      "premium_pct": 13.86,
       "naive_premium_pct": 9.03,
       "haoetf": null
     },
@@ -190,11 +190,11 @@
       "position_method": "rolling_ols",
       "position_points": 16,
       "r_idx_parts": {
-        "overnight": -0.41,
-        "today": -0.386
+        "overnight": -2.018,
+        "today": -2.171
       },
-      "est_nav": 2.9633,
-      "premium_pct": 6.7,
+      "est_nav": 2.8664,
+      "premium_pct": 10.31,
       "naive_premium_pct": 5.89,
       "haoetf": null
     }
