@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-11-26T16:59:28+08:00",
+  "generated_at": "2026-11-27T01:35:36+08:00",
   "scope": "仅跟踪标普500指数（剔除行业/主题衍生品）",
   "config": {
     "position_default": 0.95,
@@ -9,16 +9,16 @@
     "es_futures": {
       "name": "E-mini S&P 500（12月）",
       "source": "tencent",
-      "price": 7242.69,
+      "price": 7238.25,
       "prev_close": 7195.75,
-      "chg_pct": 0.65,
-      "time": "2026-11-26 16:58:09"
+      "chg_pct": 0.59,
+      "time": "2026-11-27 01:35:02"
     },
     "fx": {
       "name": "USD/CNY",
       "source": "Yahoo",
-      "price": 6.659,
-      "time": "2026-11-26 16:57:54"
+      "price": 6.6505,
+      "time": "2026-11-27 01:32:32"
     },
     "spx_klines": {
       "2026-10-08": 7765.36,
@@ -70,24 +70,24 @@
       "market": "SH",
       "secid": "1.513500",
       "price": 2.489,
-      "chg_pct": 0.53,
-      "amount": 461970000.0,
-      "quote_time": "2026-11-26 16:14:58",
-      "quote_source": "tencent",
+      "chg_pct": 0.00013,
+      "amount": null,
+      "quote_time": "2026-11-26 16:11:57",
+      "quote_source": "push2",
       "nav_source": "fundmobapi",
-      "nav": 2.2853,
-      "nav_date": "2026-11-24",
-      "nav_chg_pct": -0.52,
+      "nav": 2.2785,
+      "nav_date": "2026-11-25",
+      "nav_chg_pct": -0.3,
       "position": 1.005,
       "position_method": "rolling_ols",
       "position_points": 19,
       "r_idx_parts": {
-        "overnight": -0.254,
-        "today": 0.652
+        "overnight": 0.0,
+        "today": 0.591
       },
-      "est_nav": 2.2927,
-      "premium_pct": 8.56,
-      "naive_premium_pct": 8.91,
+      "est_nav": 2.292,
+      "premium_pct": 8.59,
+      "naive_premium_pct": 9.24,
       "haoetf": null
     },
     {
@@ -97,24 +97,24 @@
       "market": "SZ",
       "secid": "0.159612",
       "price": 1.944,
-      "chg_pct": 0.78,
-      "amount": 30650000.0,
-      "quote_time": "2026-11-26 16:14:45",
-      "quote_source": "tencent",
+      "chg_pct": 0.00015,
+      "amount": null,
+      "quote_time": "2026-11-26 15:34:45",
+      "quote_source": "push2",
       "nav_source": "fundmobapi",
-      "nav": 1.7927,
-      "nav_date": "2026-11-24",
-      "nav_chg_pct": -0.52,
+      "nav": 1.7874,
+      "nav_date": "2026-11-25",
+      "nav_chg_pct": -0.3,
       "position": 1.0024,
       "position_method": "rolling_ols",
       "position_points": 19,
       "r_idx_parts": {
-        "overnight": -0.254,
-        "today": 0.652
+        "overnight": 0.0,
+        "today": 0.591
       },
-      "est_nav": 1.7985,
-      "premium_pct": 8.09,
-      "naive_premium_pct": 8.44,
+      "est_nav": 1.798,
+      "premium_pct": 8.12,
+      "naive_premium_pct": 8.76,
       "haoetf": null
     },
     {
@@ -124,24 +124,24 @@
       "market": "SZ",
       "secid": "0.159655",
       "price": 1.873,
-      "chg_pct": 1.02,
-      "amount": 188350000.0,
-      "quote_time": "2026-11-26 16:14:51",
-      "quote_source": "tencent",
+      "chg_pct": 0.00018999999999999998,
+      "amount": null,
+      "quote_time": "2026-11-26 15:34:51",
+      "quote_source": "push2",
       "nav_source": "fundmobapi",
-      "nav": 1.7474,
-      "nav_date": "2026-11-24",
-      "nav_chg_pct": -0.54,
+      "nav": 1.7454,
+      "nav_date": "2026-11-25",
+      "nav_chg_pct": -0.11,
       "position": 0.9979,
       "position_method": "rolling_ols",
       "position_points": 19,
       "r_idx_parts": {
-        "overnight": -0.254,
-        "today": 0.652
+        "overnight": 0.0,
+        "today": 0.591
       },
-      "est_nav": 1.753,
-      "premium_pct": 6.84,
-      "naive_premium_pct": 7.19,
+      "est_nav": 1.7557,
+      "premium_pct": 6.68,
+      "naive_premium_pct": 7.31,
       "haoetf": null
     },
     {
@@ -151,24 +151,24 @@
       "market": "SH",
       "secid": "1.513650",
       "price": 1.864,
-      "chg_pct": 0.98,
-      "amount": 680220000.0,
-      "quote_time": "2026-11-26 16:14:58",
-      "quote_source": "tencent",
+      "chg_pct": 0.00017999999999999998,
+      "amount": null,
+      "quote_time": "2026-11-26 16:12:01",
+      "quote_source": "push2",
       "nav_source": "fundmobapi",
-      "nav": 1.7413,
-      "nav_date": "2026-11-24",
-      "nav_chg_pct": -0.51,
+      "nav": 1.7363,
+      "nav_date": "2026-11-25",
+      "nav_chg_pct": -0.29,
       "position": 1.0044,
       "position_method": "rolling_ols",
       "position_points": 19,
       "r_idx_parts": {
-        "overnight": -0.254,
-        "today": 0.652
+        "overnight": 0.0,
+        "today": 0.591
       },
-      "est_nav": 1.747,
-      "premium_pct": 6.7,
-      "naive_premium_pct": 7.05,
+      "est_nav": 1.7466,
+      "premium_pct": 6.72,
+      "naive_premium_pct": 7.35,
       "haoetf": null
     },
     {
@@ -178,24 +178,24 @@
       "market": "SZ",
       "secid": "0.161125",
       "price": 3.08,
-      "chg_pct": 0.49,
-      "amount": 16370000.0,
-      "quote_time": "2026-11-26 16:14:48",
-      "quote_source": "tencent",
+      "chg_pct": 0.00015,
+      "amount": null,
+      "quote_time": "2026-11-26 15:34:48",
+      "quote_source": "push2",
       "nav_source": "fundmobapi",
-      "nav": 2.9386,
-      "nav_date": "2026-11-24",
-      "nav_chg_pct": -0.49,
+      "nav": 2.9306,
+      "nav_date": "2026-11-25",
+      "nav_chg_pct": -0.27,
       "position": 0.9499,
       "position_method": "rolling_ols",
       "position_points": 19,
       "r_idx_parts": {
-        "overnight": -0.254,
-        "today": 0.652
+        "overnight": 0.0,
+        "today": 0.591
       },
-      "est_nav": 2.9475,
-      "premium_pct": 4.5,
-      "naive_premium_pct": 4.81,
+      "est_nav": 2.947,
+      "premium_pct": 4.51,
+      "naive_premium_pct": 5.1,
       "haoetf": null
     }
   ]
